@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.5.0",
+    "delay": "^2.0.0",
     "node-fetch": "^1.6.3",
     "websocket": "^1.0.24"
   }
