@@ -18,6 +18,20 @@ module.exports = token => new Promise((resolve, reject) => {
             console.log('Connection Closed')
         });
         
+        connection.setPixel = color => (x,y) => {
+            connection.send(JSON.stringify({
+                type: 'placepixel',
+                x, y, color,
+	        }))
+        }
+        
+        connection.sendCaptcha = token => {
+            connection.send(JSON.stringify({
+                type: 'captcha',
+                token,
+	        }))
+        }
+
         resolve(connection)
     })
 })
