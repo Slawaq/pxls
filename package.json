@@ -11,7 +11,9 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "delay": "^2.0.0",
+    "load-json-file": "^2.0.0",
     "node-fetch": "^1.6.3",
-    "websocket": "^1.0.24"
+    "websocket": "^1.0.24",
+    "write-json-file": "^2.0.0"
   }
 }
