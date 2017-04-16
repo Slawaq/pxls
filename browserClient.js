@@ -11,6 +11,9 @@ let handler = msg => {
             setUsers(msg.users)
             hideAddingStatus(msg.addedUserToken)
             break;
+        case 'userAddFailed':
+            setAddingErrorStatus(msg.addedUserToken)(msg.errorStack)
+            break;
         default:
             console.log('Received unknown type from server: ', msg)
     }
@@ -110,6 +113,15 @@ let showUserAddingStatus = token => {
 let hideAddingStatus = token => {
     for(let e of document.getElementsByClassName(token))
         e.remove()
+} 
+
+let setAddingErrorStatus = token => error => {
+    for(let e of document.getElementsByClassName(token))
+        e.innerHTML = `
+        <pre style="color: red;">User adding with token <b>${token}</b> is failed!
+        ${error}
+        </pre><a href='javascript: hideAddingStatus("${token}")'>[X]</a>
+    `
 } 
 
 let initControls = () => {

@@ -2,12 +2,8 @@
 
 const fetch = require('node-fetch')
 
-let getInfo = async token => {
-	let r = await fetch("http://pxls.space/info", {
-        headers: { 
-	        Cookie:  `pxls-token=${token}`,
-        }
-    })
+let getInfo = async () => {
+	let r = await fetch("http://pxls.space/info")
 	return JSON.parse(await r.buffer())
 }
 
@@ -25,8 +21,8 @@ let makePalette = palette => palette
 		toRgb: Object.assign(r.toRgb, { [x.color]: x.rgb }),
 	}), { toHex: {}, toRgb: {} })
 
-module.exports = async token => {
-    let info = await getInfo(token)
+module.exports = async () => {
+    let info = await getInfo()
     let palette = makePalette(info.palette)
     let board = await getBoard()
 

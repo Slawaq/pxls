@@ -2,14 +2,15 @@
 
 const WebSocketClient = require('websocket').client
 const Promise = require('bluebird')
+const handler = require('./handler')
 
-module.exports = token => new Promise((resolve, reject) => {
+module.exports = user => new Promise((resolve, reject) => {
     let ws = new WebSocketClient()
     ws.connect('ws://pxls.space/ws', null, 'http://pxls.space', { 
-        Cookie:  `pxls-token=${token}`,
+        Cookie:  `pxls-token=${user.token}`,
     })
     ws.on('connect', connection => {
-        console.log('CONNECTED')
+        console.log(`CONNECTED TO PXLS WS | ${user.login}`)
         
         connection.on('error', function(error) {
             console.log('Connection error:', e.message, e.stack)
@@ -31,6 +32,21 @@ module.exports = token => new Promise((resolve, reject) => {
                 token,
 	        }))
         }
+
+        let infoResolve
+        connection.info = new Promise((res, rej) => infoResolve = res)
+
+        connection.on('message', message => {
+            try {
+                if (message.type === 'utf8') {
+                    handler(user)(infoResolve)(JSON.parse(message.utf8Data))
+                } else {
+                    console.log('WARN! Received unknown message: ', message.type)
+                }
+            } catch (e) {
+                console.log('Process data error', e.stack)
+            }
+        })
 
         resolve(connection)
     })
